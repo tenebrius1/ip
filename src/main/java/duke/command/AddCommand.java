@@ -57,21 +57,7 @@ public class AddCommand extends Command {
 
         // Handles multiple todos in one command.
         if (input.split(", ").length >= 2) {
-            String[] inputTasks = extracted[1].split(", ");
-            assert inputTasks.length >= 2 : "There should at least be 2 tasks entered by the user.";
-
-            Task[] tasks = new Task[inputTasks.length];
-            try {
-                for (int i = 0, inputTasksLength = inputTasks.length; i < inputTasksLength; i++) {
-                    String inputTask = inputTasks[i];
-                    ToDo task = new ToDo(inputTask);
-                    tasks[i] = task;
-                    dataManager.writeToFile(task);
-                }
-            } catch (DukeException e) {
-                return e.getMessage();
-            }
-            return list.addToList(tasks);
+            return handleMultipleTodos(extracted[1]);
         }
 
         ToDo task = new ToDo(extracted[1]);
@@ -81,6 +67,24 @@ public class AddCommand extends Command {
             return e.getMessage();
         }
         return list.addToList(task);
+    }
+
+    private String handleMultipleTodos(String s) {
+        String[] inputTasks = s.split(", ");
+        assert inputTasks.length >= 2 : "There should at least be 2 tasks entered by the user.";
+
+        Task[] tasks = new Task[inputTasks.length];
+        try {
+            for (int i = 0, inputTasksLength = inputTasks.length; i < inputTasksLength; i++) {
+                String inputTask = inputTasks[i];
+                ToDo task = new ToDo(inputTask);
+                tasks[i] = task;
+                dataManager.writeToFile(task);
+            }
+        } catch (DukeException e) {
+            return e.getMessage();
+        }
+        return list.addToList(tasks);
     }
 
     /**

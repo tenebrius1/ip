@@ -23,11 +23,13 @@ public class FindCommand extends Command {
     @Override
     public String getResponse(String input) {
         String keyword;
+
         try {
             keyword = Parser.extractKeyword(input);
         } catch (DukeException e) {
             return e.getMessage();
         }
+
         ArrayList<Task> matchingTasks = list.searchList(keyword);
         String output = "Here are the matching tasks in your list:" + System.lineSeparator();
 
